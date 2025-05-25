@@ -5,7 +5,8 @@ using namespace std;
 int main()
 {
     cout << "Hello world!";
-    cout << " I am learning C++";
-    cout << " Welcome to Programming in C++" << endl;
+    cout << " Welcome to Programming in C++, ";
+    cout << "I am learning C++"  << endl;
+
     return 0;
 }
