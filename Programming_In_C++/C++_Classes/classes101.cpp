@@ -1,27 +1,27 @@
 #include <iostream>
 #include <string>
 using namespace std;
-class Pet {
+class Car {
 protected:
 	string Name;
 public:
-	Pet(string n) { Name = n; }
-	void Run(void) { cout << Name << ": I'm running" << endl; }
+	Car(string n) { Name = n; }
+	void Drive(void) { cout << Name << ": I'm Driving" << endl; }
 };
-class Cat : public Pet {
+class BMW : public Car {
 public:
-	Cat(string n) : Pet(n) {};
-	void MakeSound(void) { cout << Name << ": Meow! Meow!" << endl; }
+	BMW(string n) : Car(n) {};
+	void MakeSound(void) { cout << Name << "just did a fly-by!" << endl; }
 };
-class Persian : public Cat {
+class German : public BMW {
 public:
-	Persian(string n) : Cat(n) {};
+	German(string n) : BMW(n) {};
 };
 int main(void) {
-	Pet 	*a_pet;
-	Persian *a_persian;
-	a_pet = a_persian = new Persian("Mr. Bigglesworth");
-	a_persian -> MakeSound();
-	static_cast<Persian *>(a_pet) -> MakeSound();
+	Car 	*a_car;
+	German *a_german;
+	a_car = a_german = new German("A BMW M3, ");
+	a_german -> MakeSound();
+	//static_cast<German *>(a_car) -> MakeSound();
 	return 0;
 }
