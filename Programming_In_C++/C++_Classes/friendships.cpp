@@ -1,4 +1,4 @@
-class Class {
+/*class Class {
 friend class Friend;
 private:
     int field;
@@ -16,3 +16,4 @@ int main(void) {
     f.DoIt(o);
     return 0;
 }
+*/
