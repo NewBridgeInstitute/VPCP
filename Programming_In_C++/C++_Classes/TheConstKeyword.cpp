@@ -47,6 +47,9 @@ int main() {
     return 0;
 }
 */
+//THIS IS AN UPDATE OF 'THE CONST KEYWORD' IN << 2.6.1.8 >>
+//THIS TALKS ABOUT 'CONSTANT MEMBER FUNCTIONS'
+/*
 #include <iostream>
 using namespace std;
 
@@ -69,7 +72,7 @@ int main() {
     cout << "Non-Constant OBJ: " << obj2.get() <<endl;
     return 0;
 }
-
+*/
 
 
 
