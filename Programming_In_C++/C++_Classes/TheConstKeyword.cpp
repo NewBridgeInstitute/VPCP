@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 using namespace std;
 
@@ -45,3 +46,75 @@ int main() {
 
     return 0;
 }
+*/
+#include <iostream>
+using namespace std;
+
+class Class {
+public:
+	int field;
+	Class(int n) : field(n) { };
+	Class(Class &c) : field(0) { };
+	Class(void) : field(1) { };
+	void set(int n) { field = n; }
+	int get(void) const { return field; }
+};
+
+int main() {
+    const Class obj1(145);
+    cout << "Contant OBJ: " <<obj1.get() <<endl;
+    Class obj2(77);
+    cout << "===========================" <<endl;
+    obj2.set(444);
+    cout << "Non-Constant OBJ: " << obj2.get() <<endl;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
