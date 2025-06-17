@@ -344,3 +344,272 @@ int main(void) {
 	return 0;
 }
 /////////////////////////////////////
+
+<< 3.4.1.10 >>
+- Your answer should look like this:
+
+Logic error: 0
+
+Logic error: 1
+
+Exception: Unknown exception
+
+Exception: 2
+
+Something bad happened
+output
+
+Another test for you – it’s in the editor. Can you see the difference? Can you predict the program output?
+///////////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(runtime_error &re) {
+			cout << "Runtime error: " << re.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+/////////////////////////////////////////////
+
+<< 3.4.1.10 >>
+- Sharing the responsibility
+The answer is:
+
+Logic error: 0
+
+Logic error: 1
+
+Exception: Unknown exception
+
+Runtime error: 2
+
+Something bad happened
+output
+
+Is your answer the same?
+
+Now we’ll make our program more complex (look at the code in the editor). We’ve added a broker between the main and the function. The broker handles some of the passing exceptions, namely those compatible with the exception class. Now the handling process is dispersed over two levels: lower (inside broker) and upper (inside main).
+
+The output of the program is as follows:
+
+Broker - exception: 0
+
+Broker - exception: 1
+
+Broker - exception: Unknown exception
+
+Broker - exception: 2
+
+Something bad happened
+output
+
+As you see, most of the exceptions have been handled by the broker and haven’t reached the main function. You can use this method when you want to divide the responsibility of handling different kinds of exceptions between different layers of the program logic.
+//////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+void broker(int i) {
+	try { function(i); }
+	catch(exception ex) { cout << "Broker - exception: " << ex.what() << endl; }
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			broker(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(runtime_error &re) {
+			cout << "Runtime error: " << re.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+////////////////////////////////////////
+
+<< 3.4.1.12 >>
+-
+The program in the editor will check your understanding of the problem. Can you predict its output?
+
+Yes, it’ll look like this:
+/////////////////////////////////////////
+#include <stdexcept>
+#include <exception>
+#include <iostream>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+void broker(int i) {
+	try { function(i); }
+	catch(logic_error &le) { cout << "Broker - logic_error: " << le.what() << endl; }
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			broker(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(runtime_error &re) {
+			cout << "Runtime error: " << re.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+//////////////////////////////////////
+
+<< 3.4.1.13 >>
+- A badly constructed broker may ruin the exception handling logic at higher levels. Take a look at the example code in the editor.
+
+The broker’s decided to take control over all arriving exceptions. None of them will leave the broker. We can say that “everything that comes to the broker stays in the broker”.
+
+The output of the program isn’t really varied – this is how it looks:
+/////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+void broker(int i) {
+	try {
+		function(i);
+	}
+	catch(...) {
+		cout << "Broker swept problems under the carpet " << endl;
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			broker(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(runtime_error &re) {
+			cout << "Runtime error: " << re.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+////////////////////////////////////
+
+<< 3.4.1.14 >>
+- The responsibility of handling exceptions may not only be divided – it may be shared, too. This means that the handling of the same exceptions may be provided at more than one level.
+
+Note that any of the catch branches might throw an exception too, and the exception won’t be handled in the place where it was created, but at a higher level.
+/////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+void broker(int i) {
+	try {
+		function(i);
+	}
+	catch(...) {
+		cout << "Broker swept problems under the carpet " << endl;
+		throw;
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			broker(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(runtime_error &re) {
+			cout << "Runtime error: " << re.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+/////////////////////////////////////////
+
