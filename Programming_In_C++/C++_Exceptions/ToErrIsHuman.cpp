@@ -94,3 +94,18 @@ int main(void){
     }
 }
 ]]
+
+// << 3116 >>
+//ANATOMY OF AN EXCEPTION OBJECT:
+THE EXCEPTION CLASS IS VERY MODEST(SIMPLE).
+[[VITUAL CHAR* WHAT() ]]
+//WHERE ARE EXCEPTIONS THROWN?
+YOU DO HIS BY USING THE "TRY" STATEMENT.
+[[
+TRY {
+    :
+    :
+    :
+]}..
+
+//<< 3117 >>
