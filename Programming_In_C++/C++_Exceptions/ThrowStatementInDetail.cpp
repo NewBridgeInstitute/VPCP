@@ -170,4 +170,210 @@ int main(void) {
     return 0;
 }
 
-// <<  >>
+// << 3216 >>
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(int i) {
+	throw Class("object");
+}
+int main(void) {
+    try {
+	function(1);
+    } catch(Class &exc) {
+	cout << "Caught!" << endl;
+    }
+    return 0;
+}
+
+//<< 3217 >>
+//THROW AND ITS SPCECS:
+//A function, which throws an exception, may (but doesn’t have to) specify the types of the entities being thrown.
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(void) throw (Class) {
+	throw Class("object");
+}
+int main(void) {
+    try {
+	function();
+    } catch(Class &exc) {
+	cout << "Caught!" << endl;
+    }
+    return 0;
+}
+
+//<< 3218 >>
+// The function specifies that it throws exceptions of type Class, although it actually throws string.
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(void) throw (Class) {
+	throw string("object");
+}
+int main(void) {
+    try {
+	function();
+    } catch(Class &exc) {
+	cout << "Caught!" << endl;
+    }
+    return 0;
+}
+
+// << 3219 >>
+// HERE IS THE CORRECT VERSION: (NOT!)
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(void) throw (Class) {
+	throw string("object");
+}
+int main(void) {
+    try {
+	function();
+    } catch(string &exc) {
+	cout << "Caught!" << endl;
+    }
+    return 0;
+}
+*/
+///////////////////////////////////////////////////////////////
+/*
+//<< 321.10 >>
+//TRY ONE OF THESE AND SEE IF THEY WORK::
+//[[#01]] THIS ONE DEFS DONT WORK!
+#include <iostream>
+using namespace std;
+class Class {
+public:
+    string msg;
+    Class(string txt) : msg(txt) {}
+};
+void function(void) throw (string) {
+    throw string("object");
+}
+int main(void) {
+    try {
+    function();
+    } catch(string &exc) {
+    cout << "Caught!" << endl;
+    }
+    return 0;
+}
+*/
+/*
+//[[#02]]
+#include <iostream>
+using namespace std;
+class Class {
+public:
+    string msg;
+    Class(string txt) : msg(txt) {}
+};
+void function(void) throw () {
+    throw string("object");
+}
+int main(void) {
+    try {
+    function();
+    } catch(string &exc) {
+    cout << "Caught!" << endl;
+    }
+    return 0;
+}
+// RESULT IS: terminate called after throwing an instance of 'std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >'
+*/
+///////////////////////
+/*
+//<< 321.11 >>
+Now we’re going to show you something more complex. Take a look at the code in the editor.
+
+The function throws two different exceptions (this is what the specification says), but exceptions of different types are handled differently.
+
+Note that there’s another function (named level) which has created an intermediate platform between the function and the main.
+
+The level function catches exceptions of type string (the objects of this class end their lives there), but Class exceptions fly on to the main function and are caught there.
+
+It’s a very simple illustration of the concept saying that exception handling may be distributed among different parts of the program. You can handle your exceptions in the most suitable places and don’t need to collect all catches in one function or module.
+
+We want you to answer a question: look, there’s no throw inside the level function, right?
+
+So why there is a throw specification in the header? Is it
+obligatory?
+////////////////////
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(int i) throw (string,Class) {
+    switch(i) {
+	case 0 : throw string("string");
+	case 1 : throw Class("object");
+	default: cout << "OK" << endl;
+    }
+}
+void level(int i) throw(Class) {
+    try {
+	function(i);
+    } catch(string &exc) {
+	cout << "String [" << exc << "] caught in level()" << endl;
+    }
+}
+int main(void) {
+    for(int i = 0; i < 2; i++) {
+        cout << "-------" << endl;
+	try {
+	    level(i);
+	} catch(Class &exc) {
+	    cout << "Object [" << exc.msg << "] caught in main()" << endl;
+	}
+    }
+    return 0;
+}
+/////////////////////
+<< 321.12 >>
+<< UNEXPECTED EXCEPTIONS HANDLING >> & YES IT IS OBLIGATORY!!
+#include <iostream>
+#include <string>
+
+using namespace std;
+class Class {
+public:
+	string msg;
+	Class(string txt) : msg(txt) {}
+};
+void function(void) throw () {
+	throw string("object");
+}
+void lastchance(void) {
+	cout << "See what you've done! You've thrown an illegal exception!" << endl;
+}
+int main(void) {
+    set_unexpected(lastchance);
+    try {
+	function();
+    } catch(string &exc) {
+	cout << "Caught!" << endl;
+    }
+    return 0;
+}
