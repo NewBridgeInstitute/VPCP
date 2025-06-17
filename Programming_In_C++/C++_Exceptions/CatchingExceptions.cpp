@@ -1,0 +1,240 @@
+//<< 3.4.1.1 CATCHING EXCEPTIONS >>
+
+/*
+= Different catches for different purposes =
+
+As you’ve already learnt, the catch instruction is supposed to “catch” events passing through the instruction’s scope. You also know that the catch “catches” only these exceptions that are compatible in type with the catch header. For example, the following instruction:
+
+///////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	}
+}
+int main(void) {
+	for(int i = 0; i < 3; i++) {
+		try {
+			function(i);
+		}
+		catch(...) {
+			cout << "Exception caught!" << endl;
+		}
+	}
+	return 0;
+}
+*/
+/////////////////////////////
+
+/* << 3.4.1.2 >>
+- We’ve modified our program – can you see the difference? Yes, we’ve changed the catch header and added the “exception ex” instead of the ellipsis.
+////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	case 3: throw exception();
+	}
+}
+int main(void) {
+	for(int i = 0; i < 4; i++) {
+		try {
+			function(i);
+		}
+		catch(exception &ex) {
+			cout << "Exception caught: " << ex.what() << endl;
+		}
+	}
+	return 0;
+}
+////////////////////////
+
+<< 3.4.1.3 >>
+- If we’re going to, or if we have to, provide different ways of handling different exceptions, we’re allowed to specify as many different catch branches as we want (or need). In our example, the function throws four different exceptions and we can make four catch branches: one branch per exception type.
+
+The modified program is in the editor.
+
+Currently, each of the exceptions is handled separately.
+//////////////////////////
+#include <iostream>
+#include  <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	case 3: throw exception();
+	}
+}
+int main(void) {
+	for(int i = 0; i < 4; i++) {
+		try {
+			function(i);
+		}
+		catch(out_of_range &ofr) {
+			cout << "Out of range: " << ofr.what() << endl;
+		}
+		catch(overflow_error &ovf) {
+			cout << "Overflow: " << ovf.what() << endl;
+		}
+		catch(domain_error &dmn) {
+			cout << "Domain: " << dmn.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+	}
+	return 0;
+}
+//////////////////////////
+
+<< 3.4.1.4 >>
+- There’s no need to choose between “all or none”. We can selectively choose the exceptions we want to catch and handle carefully, and those that we want to handle very briefly.
+
+The code in the editor mixes the two previous approaches: some of the exceptions are caught individually while others go to the ellipsis.
+///////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	case 3: throw exception();
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(out_of_range &ofr) {
+			cout << "Out of range: " << ofr.what() << endl;
+		}
+		catch(overflow_error &ovf) {
+			cout << "Overflow: " << ovf.what() << endl;
+		}
+		catch(domain_error &dmn) {
+			cout << "Domain: " << dmn.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+///////////////////////////
+
+<< 3.4.1.5 >>
+- Order of the catch branches
+Our last question may suggest that the order of the catch branches matters. Does it really matter?
+
+The answer isn’t really clear: yes and no.
+
+We’ll show you two examples justifying both answers.
+
+We’ll start from the “no” variant.
+
+Take a look at the example: we’ve swapped two of the first catch branches. Does it change the program’s behaviour?
+///////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	case 3: throw exception();
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(overflow_error &ovf) {
+			cout << "Overflow: " << ovf.what() << endl;
+		}
+		catch(out_of_range &ofr) {
+			cout << "Out of range: " << ofr.what() << endl;
+		}
+		catch(domain_error &dmn) {
+			cout << "Domain: " << dmn.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+////////////////////////////////////
+
+<< 3.4.1.6 >>
+- It’s time for the next swap. Now we’ve swapped the first and the fourth catch branches.
+
+[Does it change the program’s behaviour?
+
+Yes, it does!]
+
+First of all, you should expect that the compiler is going to produce some warning messages. It won’t prevent your program from being successfully compiled, but the warnings suggest that not everything has gone as we would have liked.
+////////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw out_of_range("0");
+	case 1: throw overflow_error("1");
+	case 2: throw domain_error("2");
+	case 3: throw exception();
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(out_of_range &ofr) {
+			cout << "Out of range: " << ofr.what() << endl;
+		}
+		catch(overflow_error &ovf) {
+			cout << "Overflow: " << ovf.what() << endl;
+		}
+		catch(domain_error &dmn) {
+			cout << "Domain: " << dmn.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
