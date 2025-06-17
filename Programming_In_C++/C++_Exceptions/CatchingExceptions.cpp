@@ -238,3 +238,109 @@ int main(void) {
 	}
 	return 0;
 }
+///////////////////////////////////
+
+<< 3.4.1.7 >>
+- When the exception arrives at a set of catch branches, the first compatible branch is chosen (and only this one) as a target handler.
+
+This means that when a more general type/class is placed before the more specific compatible type/class, the second branch will receive no exceptions at all.
+//////////////////////////////////////
+#include<iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+	}
+	return 0;
+}
+////////////////////////////////////////
+
+<< 3.4.1.8 >>
+- We can repair our program in a very simple way – all we have to do here is add an ellipsis branch, which will be responsible for taking care of all the orphaned exceptions. Of course, it’s not a remedy for all your problems with unhandled exceptions. Real life creates more complicated circumstances.
+/////////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+/////////////////////////////////////////
+
+<< 3.4.1.9 >>
+-
+Now we’re going to test you. The next two slides should prove that you understand the process of selecting the target exception handler.
+
+We’ve modified the previous program slightly – you can find it in the editor.
+
+Can you predict its output?
+
+You’ll find the answer on the next slide.
+////////////////////////////////////////
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+void function(int i) {
+	switch(i) {
+	case 0: throw domain_error("0");
+	case 1: throw logic_error("1");
+	case 2: throw exception();
+	case 3: throw range_error("2");
+	case 4: throw "so bad";
+	}
+}
+int main(void) {
+	for(int i = 0; i < 5; i++) {
+		try {
+			function(i);
+		}
+		catch(logic_error &le) {
+			cout << "Logic error: " << le.what() << endl;
+		}
+		catch(exception &ex) {
+			cout << "Exception: " << ex.what() << endl;
+		}
+		catch(...) {
+			cout << "Something bad happened" << endl;
+		}
+	}
+	return 0;
+}
+/////////////////////////////////////
