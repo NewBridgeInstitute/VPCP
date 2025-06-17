@@ -46,6 +46,7 @@ Something bad happened: Bad arg d
 
 You should be able to explain this easily enough.
 START CODE SAMPLES HERE:...
+
 -->[[// << 3211 THROW STAT IN DETAIL: >>
 #include <iostream>
 using namespace std;
@@ -75,4 +76,98 @@ int main(void) {
 }
 ]]
 
+// << 3212 >>
+//Throw and catch separated
+#include <iostream>
+using namespace std;
+float DoCalculations(float a, float b, float c, float d) {
+	float x;
+	if(a == 0.0)
+		throw string("Bad arg a");
+	x = 1 / a;
+	if(b == 0.0)
+		throw string("Bad arg b");
+	x /= b;
+	if(c == 0.0)
+		throw string("Bad arg c");
+	x /= c;
+	if(d == 0.0)
+		throw string("Bad arg d");
+	return x / d;
+}
+int main(void) {
+   try {
+	DoCalculations(1,2,3,0);
+   } catch(string &exc) {
+	cout << "Something bad happened: " << exc << endl;
+   }
+   return 0;
+}
+
+
 << 3213 >>
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	Class(void)  { cout << "Object constructed" << endl; }
+	~Class(void) { cout << "Object destructed" << endl; }
+	void Hello(void) { cout << "Object says: hello" << endl; }
+};
+
+float DoCalculations(void) {
+	Class object;
+	object.Hello();
+	return 0.0;
+}
+
+int main(void) {
+   DoCalculations();
+   return 0;
+}
+
+
+//<< 3214 >>
+/*
+Here is the modified program.
+
+We’ve added three throw instructions within the DoCalculations function. Now we can precisely control (using a parameter value) which one will be executed. Note that the first is placed at the function beginning, before the object is created, the second in the middle and the third at the end of the function.
+
+The Class definition remains the same.
+
+The main function will invoke DoCalculations three times and we’ll be able to observe the function’s behaviour.
+
+The program outputs the following text:
+*/
+/*
+#include <iostream>
+using namespace std;
+class Class {
+public:
+	Class(void)  { cout << "Object constructed" << endl; }
+	~Class(void) { cout << "Object destructed" << endl; }
+	void Hello(void) { cout << "Object says: hello" << endl; }
+};
+void DoCalculations(int i) {
+	if(i == 0)
+		throw string("fatal 1");
+	Class object;
+	if(i == 1)
+		throw string("fatal 2");
+	object.Hello();
+	if(i == 2)
+		throw string("fatal 3");
+}
+int main(void) {
+    for(int i = 0; i < 3; i++) {
+	try {
+	   cout << "-------" << endl;
+	   DoCalculations(i);
+	} catch (string &exc) {
+	   cout << exc << endl;
+	}
+    }
+    return 0;
+}
+
+// <<  >>
