@@ -239,12 +239,14 @@ int main(void) {
 	return 0;
 }
 ///////////////////////////////////
-
-<< 3.4.1.7 >>
+*/
+//<< 3.4.1.7 >>
+/*
 - When the exception arrives at a set of catch branches, the first compatible branch is chosen (and only this one) as a target handler.
 
 This means that when a more general type/class is placed before the more specific compatible type/class, the second branch will receive no exceptions at all.
 //////////////////////////////////////
+*//*
 #include<iostream>
 #include <exception>
 #include <stdexcept>
@@ -269,6 +271,8 @@ int main(void) {
 	}
 	return 0;
 }
+*/
+/*
 ////////////////////////////////////////
 
 << 3.4.1.8 >>
@@ -611,5 +615,59 @@ int main(void) {
 	}
 	return 0;
 }
-/////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
