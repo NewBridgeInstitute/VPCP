@@ -105,6 +105,74 @@ Passing a string containing only letters to a function expecting a date coded in
 /*
 ////////////////
 << 3315 CATEGORIZING EXCEPTIONS(CONTINUES 'ERROR CLASS EXPLANATIONS') >>
-////////////////
+/////////////
+<< 3316 CONTINUES.. >>
+///////////////////////////////////
 
-*/
+//<< 3.3.1.7 >> TALKS: BAD_EXCEPTION
+bad_exception:
+exception ← bad_exception
+The bad_exception exception is thrown when a function tries to throw an exception not specified inside its throw specification.
+::Note that this exception cannot be caught directly. The program here in the editor doesn’t output either “It's so bad...” or “Done”, or even “Got double” messages.
+//////////////////
+#include <iostream>
+#include <exception>
+using namespace std;
+void function(void) throw(int) {
+	throw 3.14;
+}
+int main(void) {
+	try {
+		function();
+	} catch(double f) {
+		cout << "Got double" << endl;
+	} catch(bad_exception bad) {
+		cout << "It's so bad..." << endl;
+	}
+	cout << "Done" << endl;
+	return 0;
+}
+////////////////////
+
+////////////////////
+<< 3.3.1.8 >>
+/*
+Proper handling of the bad_exception exception requires the function to specify bad_exception on its throw list (it looks like a paradox but it’s true), and the unexpected handler function must be defined and set. Failure to meet any of these conditions will result in undesired program behaviour.
+
+The program in the editor will output the following lines to the screen:
+
+Unexpected exception arrived!
+[
+It's so bad...
+
+Done
+]
+{{output}}
+
+Note the empty throw statement inside the unexp function. This form doesn’t mean that the function throws nothing – on the contrary, it means that the exception received by the function is re-thrown.
+
+We’ll return to this issue soon.
+*///////////////////
+/*
+#include <iostream>
+#include <exception>
+using namespace std;
+void unexp(void) {
+	cout << "Unexpected exception arrived!" << endl;
+	throw;
+}
+void function(void) throw(int, bad_exception) {
+	throw 3.14;
+}
+int main(void) {
+	set_unexpected(unexp);
+	try {
+		function();
+	} catch(double f) {
+		cout << "Got double" << endl;
+	} catch(bad_exception bad) {
+		cout << "It's so bad..." << endl;
+	}
+	cout << "Done" << endl;
+	return 0;
+}
