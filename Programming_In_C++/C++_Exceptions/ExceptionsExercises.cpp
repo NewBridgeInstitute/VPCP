@@ -42,7 +42,7 @@ int main(void) { // MAIN
 
 }
 */
-/*
+
 ////////////////////////////////////////////////
 // QUESTION 2:
 
@@ -52,11 +52,11 @@ int main(void) { // MAIN
 #include <string>
 
 using namespace std;
-class InvalidAgeException
+class InvalidAgeException:
 
 int main() {
 
     cout << " " << endl;
     return 0;
 }
-*/
+
