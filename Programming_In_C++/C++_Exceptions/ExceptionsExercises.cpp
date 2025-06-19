@@ -1,7 +1,7 @@
-/*////////////////////////////////////////
+////////////////////////////////////////
 //// EXCEPTIONS EXERCISE:
 ////////////////////////////////////////
-// QUESTION 1: sudo<<311.10>>
+/*/ QUESTION 1: sudo<<311.10>>
 #include <iostream>
 #include <exception>
 #include <stdexcept>
@@ -9,30 +9,30 @@
 
 using namespace std;
 
-float divide(int a, int b) {
+float divide(int a, int b) { // MY INTEGERS
 
-    if(b == 0)
+    if(b == 0) // CHECKING FOR DIVISION BY ZERO
 
-        throw string("You divided 0... ");
+        throw string("You divided 0... ");  // THROWING AN EXCEPTION
 
-        return a/b;
+        return a/b;  // RETURNING THE RESULT OF THE DIVISION
 }
 
-int main(void) {
+int main(void) { // MAIN
 
-    float a, b;
+    float a, b; // DECLARING FLOATING POINT VARIABLES
 
-    while(cin >> a) {
+    while(cin >> a) {  // WHILE LOOP TO CONTINUE READING INPUT
 
-        try {
+        try {  // TRY BLOCK TO CATCH EXCEPTIONS
 
-            cin >> b;
+            cin >> b;  // READING SECOND FLOATING POINT VARIABLE
 
-            cout << divide(a, b) << endl;
+            cout << divide(a, b) << endl;  // CALLING THE DIVIDE FUNCTION
 
-        } catch (string &problem) {
+        } catch (string &problem) {  // CATCHING STRING EXCEPTIONS
 
-        cout << "Cannot divide by zero! " << endl;
+        cout << "Cannot divide by zero! " << endl;  // PRINTING A MESSAGE
         cout << problem << endl;
         }
 
@@ -42,12 +42,14 @@ int main(void) {
 
 }
 */
+/*
 ////////////////////////////////////////////////
 // QUESTION 2:
-/*
+
 #include <iostream>
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 class InvalidAgeException
