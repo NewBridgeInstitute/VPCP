@@ -79,3 +79,38 @@ int main(void) {
     return 0;
 }
 */
+/////////////////////////////////////////////
+/* 4.2.1.7 ENUMERATED TYPES
+Try to implement the << operator in a smarter way by avoiding that awfully verbose switch instruction. It should be possible to make it more compact.
+
+Will you dare?*/
+#include <iostream>
+
+using namespace std;
+
+enum weekday {SUNDAY,MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY};
+
+weekday operator+(weekday day, int days) {
+	return weekday((int(day) + days) % 7);
+}
+
+ostream& operator<< (ostream &strm, weekday day) {
+	switch(int(day)) {
+	case SUNDAY:    strm << "SUNDAY"; break;
+	case MONDAY:    strm << "MONDAY"; break;
+	case TUESDAY:   strm << "TUESDAY"; break;
+	case WEDNESDAY: strm << "WEDNESDAY"; break;
+	case THURSDAY:  strm << "THURSDAY"; break;
+	case FRIDAY:    strm << "FRIDAY"; break;
+	case SATURDAY:  strm << "SATURDAY"; break;
+	default:        strm << "Somewhere inside the depths of time..."; break;
+	}
+	return strm;
+}
+
+int main(void) {
+	weekday d = SATURDAY;
+	d = d + 16;
+	cout << "So now the day will be: " << d << endl;
+	return 0;
+}
