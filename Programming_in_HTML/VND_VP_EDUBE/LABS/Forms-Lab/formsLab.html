@@ -12,14 +12,49 @@
     <p>
 In this task, you will practice integrating additional form elements like  textarea, select, button, and fieldset. These elements are crucial for creating more complex forms that require varied inputs and structured layouts.
 </p>
-
+    <!--INPUT FIELDS FOR NAME AND EMAIL-->
     <label for="name">
         <input type="text" id="name" name="name">
     </label>
-
+    <br><br>
     <label for="email">
         <input type="text" id="email" name="email">
     </label>
 
+    <br><br>
+
+    <!--TEXTAREA ELEMENT-->
+    <textarea name="message" id="message" rows="4" cols="50">Message...</textarea>
+
+    <br><br>
+    
+    <!--SELECT DROPDOWN MENU-->
+    <label for="department">Department:</label>    
+        <select name="department" id="department">
+        <option value="">Sales</option>
+        <option value="">Support</option>
+        <option value="">General</option>
+    </select>
+
+    <br><br>
+
+    <!--BUTTON ELEMENT-->
+    <button onclick="alert('SUBMITTED!')">Submit</button>
+    <button onclick="alert('REST!')">Reset</button>
+
+    <br><br>
+
+    <!--FIELDSET GROUPING-->
+    <fieldset>
+        <legend>Contact Information</legend>
+        <label for="name">Name:</label>  
+            <input type="text" id="name" name="name">
+        <br>
+        <label for="email">Email:</label>
+            <input type="text" id="email" name="email">
+        <br><br>
+        <button onclick="alert('Submitted')">Submit</button>
+        <button onclick="alert('Reset')">Reset</button>
+    </fieldset>
 </body>
 </html>
